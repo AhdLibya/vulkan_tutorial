@@ -1,6 +1,5 @@
 #include "window.h"
 
-#include <stdexcept>
 namespace ahd {
 
 	ahdwindow::ahdwindow(int h, int w, std::string name) : width{ w }, hight{ h }, windowName{ name } {
@@ -10,12 +9,6 @@ namespace ahd {
 	ahdwindow::~ahdwindow() {
 		glfwDestroyWindow(window);
 		glfwTerminate();
-	}
-
-	void ahdwindow::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface_) {
-		if (glfwCreateWindowSurface(instance , window , nullptr , surface_) != VK_SUCCESS) {
-			throw std::runtime_error("faild to create window surface");
-		}
 	}
 
 	void ahdwindow::initWindow() {

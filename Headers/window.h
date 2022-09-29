@@ -19,8 +19,6 @@ namespace ahd {
 
 			bool ShoudClose() { return glfwWindowShouldClose(window); };
 
-			void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface_);
-
 		private :
 
 			void initWindow();

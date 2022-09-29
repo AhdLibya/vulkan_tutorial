@@ -27,6 +27,12 @@
     <ClCompile Include="first_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ahd_pipline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ahd_device.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
@@ -35,13 +41,22 @@
     <ClInclude Include="first_app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ahd_pipline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ahd_device.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample_shader.vet">
+    <None Include="Shaders\sample_shader.frag">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="sample_shader.frag">
+    <None Include="Shaders\sample_shader.vert">
       <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="compile.bat">
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
 </Project>
