@@ -2,6 +2,7 @@
 
 #include "window.h"
 #include "ahd_pipline.h"
+#include "ahd_device.hpp"
 
 namespace ahd {
 	class first_app
@@ -12,7 +13,13 @@ namespace ahd {
 			void run();
 		private:
 			ahdwindow ahdwindow{WIDTH , HIGHT , "Hello vulkon "};
-			AhdPipline AhdPipline{ "Shaders\\sample_shader.vert.spv" , "Shaders\\sample_shader.frag.spv" };
+			ahdDevice AhdDevice{ ahdwindow };
+
+			AhdPipline AhdPipline{ 
+				AhdDevice ,
+				"Shaders\\sample_shader.vert.spv" ,
+				"Shaders\\sample_shader.frag.spv" ,
+				AhdPipline:: defaultPiplineConfigInfo(WIDTH, HIGHT)};
 	};
 
 }
