@@ -21,10 +21,21 @@ namespace ahd {
 	void ahdwindow::initWindow() {
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		
 		 window = glfwCreateWindow(width , hight , windowName.c_str() , nullptr , nullptr);
+		 glfwSetWindowUserPointer(window, this);
+		 glfwSetFramebufferSizeCallback(window, frameBufferResizeWindowCallBack);
+
 
 	}
 
+	void ahdwindow::frameBufferResizeWindowCallBack(GLFWwindow* window, int width, int height)
+	{
+		auto ahdWindow = reinterpret_cast<ahdwindow*>(glfwGetWindowUserPointer(window));
+		ahdWindow->frameBufferReszie = true;
+		ahdWindow->width = width;
+		ahdWindow->hight = height;
+
+	}
 }

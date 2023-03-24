@@ -21,33 +21,35 @@ namespace ahd {
 
 	std::vector<char> AhdPipline::readfile(const std::string& filepath) {
 
-		std::ifstream file(filepath, std::ios::ate, std::ios::binary);
+		std::ifstream file(filepath, std::ios::ate | std::ios::binary);
+		std::string ERROMESSAGE = "[ERROR]: Failed To Open File!\n [FILE]: ";
 
-		if (!file.is_open()) {
-			throw std::runtime_error("faild to open file path at : " + filepath);
+		if (!file.is_open())
+		{
+			throw std::runtime_error(ERROMESSAGE.append(filepath));
 		}
 
-		size_t filesize = static_cast<size_t>(file.tellg());
-		std::vector<char> buffer(filesize);
+		size_t fileSize = (size_t)file.tellg();
+		std::vector<char> buffer(fileSize);
 
 		file.seekg(0);
-		file.read(buffer.data(), filesize);
-
+		file.read(buffer.data(), fileSize);
 		file.close();
-		
+
 		return buffer;
 	}
 
 	void AhdPipline::createGraphicsPipline(const std::string& vertexfile, const std::string& fragmentfile, const PiplineConfigInfo& configInfo) {
 		assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot Create Gp-pipline ::  Pipline layout Not Found in ConfigInfo ");
 		assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot Create Gp-pipline ::  renderpass Not Found in ConfigInfo ");
-
+		std::cout << "Creating GP Pipline" << '\n';
 		auto vertex   = readfile(vertexfile);
 		auto fragment = readfile(fragmentfile);
-		
+		std::cout << "Creating GP Pipline stage 1" << '\n';
 		createShaderModule(vertex  , &vertShaderModule);
 		createShaderModule(fragment, &fragShaderModule);
 		VkPipelineShaderStageCreateInfo shaderStage[2];
+		std::cout << "Creating GP Pipline stage 2" << '\n';
 		//vertex
 		shaderStage[0].sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		shaderStage[0].stage  = VK_SHADER_STAGE_VERTEX_BIT;
@@ -66,12 +68,27 @@ namespace ahd {
 		shaderStage[1].pSpecializationInfo = nullptr;
 
 
+		auto bindingDescriotions   = Model::Vertex::getBindingDescriptions();
+		auto attributeDescriptions = Model::Vertex::getAttributeDescriptions();
+
+		std::cout << "Creating GP Pipline stage 3" << '\n';
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertexInputInfo.vertexAttributeDescriptionCount = 0;
-		vertexInputInfo.vertexBindingDescriptionCount   = 0;
-		vertexInputInfo.pVertexAttributeDescriptions    = nullptr;
-		vertexInputInfo.pVertexBindingDescriptions      = nullptr;
+		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+		vertexInputInfo.vertexBindingDescriptionCount   = static_cast<uint32_t>(bindingDescriotions.size());
+		vertexInputInfo.pVertexAttributeDescriptions    = attributeDescriptions.data();
+		vertexInputInfo.pVertexBindingDescriptions      = bindingDescriotions.data();
+		/*
+		VkPipelineViewportStateCreateInfo viewportInfo{};
+		viewportInfo.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		viewportInfo.viewportCount = 1;
+		viewportInfo.pViewports    = &configInfo.viewport;
+		viewportInfo.scissorCount  = 1;
+		viewportInfo.pScissors     = &configInfo.scissor;
+		*/
+		
+		
+
 		// Pipline Info Setup :)
 		VkGraphicsPipelineCreateInfo piplineInfo{};
 		piplineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -84,7 +101,7 @@ namespace ahd {
 		piplineInfo.pMultisampleState   = &configInfo.multisampleInfo;
 		piplineInfo.pColorBlendState    = &configInfo.colorBlendInfo;
 		piplineInfo.pDepthStencilState  = &configInfo.depthStencilInfo;
-		piplineInfo.pDynamicState       = nullptr;
+		piplineInfo.pDynamicState       = &configInfo.dynamicStateInfo;
 
 		piplineInfo.layout     = configInfo.pipelineLayout;
 		piplineInfo.renderPass = configInfo.renderPass;
@@ -93,6 +110,7 @@ namespace ahd {
 		piplineInfo.basePipelineIndex  = -1;
 		piplineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
+		std::cout << "Creating GP Pipline stage 4" << '\n';
 		if (vkCreateGraphicsPipelines(AhdDevice.device(), VK_NULL_HANDLE, 1, &piplineInfo, nullptr, &GraphicsPipline) != VK_SUCCESS)
 		{
 			throw std::runtime_error("faild to create graphics pipline");
@@ -101,40 +119,40 @@ namespace ahd {
 	}
 
 	void AhdPipline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
-		VkShaderModuleCreateInfo createInfo{};
-		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-		createInfo.codeSize = code.size();
-		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+		std::cout << "Creating Shader Module stage 1" << '\n';
+		VkShaderModuleCreateInfo createShaderModuleInfo{};
+		createShaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		createShaderModuleInfo.codeSize = code.size();
+		createShaderModuleInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-		if (vkCreateShaderModule(AhdDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) {
-			throw std::runtime_error("Faild To Create Shader Module");
+		if (vkCreateShaderModule(AhdDevice.device(), &createShaderModuleInfo, nullptr, shaderModule) != VK_SUCCESS) {
+			std::cout << "failed to create shader module" << '\n';
+			throw std::runtime_error("failed to create shader module");
 		}
+		std::cout << "Creating Shader Module stage 2" << '\n';
 	}
 
-	PiplineConfigInfo AhdPipline::defaultPiplineConfigInfo(uint32_t width, uint32_t height) {
-		PiplineConfigInfo configInfo{};
+	void AhdPipline:: bind(VkCommandBuffer commandbuffer) {
+		vkCmdBindPipeline(commandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, GraphicsPipline);
+	}
 
+	void AhdPipline::defaultPiplineConfigInfo(PiplineConfigInfo& configInfo) {
+
+		std::cout << "creating PiplineConfig Info struct" << '\n';
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
-
-
-		configInfo.viewport.x = 0.0f;
-		configInfo.viewport.y = 0.0f;
-		configInfo.viewport.width = static_cast<float>(width);
-		configInfo.viewport.height = static_cast<float>(height);
-		configInfo.viewport.minDepth = 0.0f;
-		configInfo.viewport.maxDepth = 1.0f;
-
-		configInfo.scissor.offset = { 0, 0 };
-		configInfo.scissor.extent = { width, height };
+		std::cout << "Compile stage 1" << '\n';
 
 		configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		configInfo.viewportInfo.viewportCount = 1;
-		configInfo.viewportInfo.pViewports = &configInfo.viewport;
-		configInfo.viewportInfo.scissorCount = 1;
-		configInfo.viewportInfo.pScissors = &configInfo.scissor;
-
+		configInfo.viewportInfo.pViewports    =  nullptr;
+		configInfo.viewportInfo.scissorCount  = 1;
+		configInfo.viewportInfo.pScissors     = nullptr;
+		configInfo.viewportInfo.flags = 0;
+		std::cout << "Compile stage 2" << '\n';
+		
+		std::cout << "Compile stage 4" << '\n';
 		configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 		configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
 		configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
@@ -146,7 +164,7 @@ namespace ahd {
 		configInfo.rasterizationInfo.depthBiasConstantFactor = 0.0f;  // Optional
 		configInfo.rasterizationInfo.depthBiasClamp = 0.0f;           // Optional
 		configInfo.rasterizationInfo.depthBiasSlopeFactor = 0.0f;     // Optional
-
+		std::cout << "Compile stage 5" << '\n';
 		configInfo.multisampleInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 		configInfo.multisampleInfo.sampleShadingEnable = VK_FALSE;
 		configInfo.multisampleInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -154,7 +172,8 @@ namespace ahd {
 		configInfo.multisampleInfo.pSampleMask = nullptr;             // Optional
 		configInfo.multisampleInfo.alphaToCoverageEnable = VK_FALSE;  // Optional
 		configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE;       // Optional
-
+		configInfo.multisampleInfo.flags = 0;
+		std::cout << "Compile stage 6" << '\n';
 		configInfo.colorBlendAttachment.colorWriteMask =
 			VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
 			VK_COLOR_COMPONENT_A_BIT;
@@ -165,7 +184,7 @@ namespace ahd {
 		configInfo.colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;   // Optional
 		configInfo.colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;  // Optional
 		configInfo.colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;              // Optional
-
+		std::cout << "Compile stage 7" << '\n';
 		configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 		configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
 		configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY;  // Optional
@@ -175,7 +194,7 @@ namespace ahd {
 		configInfo.colorBlendInfo.blendConstants[1] = 0.0f;  // Optional
 		configInfo.colorBlendInfo.blendConstants[2] = 0.0f;  // Optional
 		configInfo.colorBlendInfo.blendConstants[3] = 0.0f;  // Optional
-
+		std::cout << "Compile stage 8" << '\n';
 		configInfo.depthStencilInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 		configInfo.depthStencilInfo.depthTestEnable = VK_TRUE;
 		configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
@@ -184,9 +203,16 @@ namespace ahd {
 		configInfo.depthStencilInfo.minDepthBounds = 0.0f;  // Optional
 		configInfo.depthStencilInfo.maxDepthBounds = 1.0f;  // Optional
 		configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
+		configInfo.depthStencilInfo.flags = 0;
 		configInfo.depthStencilInfo.front = {};  // Optional
 		configInfo.depthStencilInfo.back = {};
+		std::cout << "Compile stage 9" << '\n';
 
-		return configInfo;
+		configInfo.dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+		configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStateEnables.data();
+		configInfo.dynamicStateInfo.dynamicStateCount =
+			static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
+		configInfo.dynamicStateInfo.flags = 0;
 	}
 }

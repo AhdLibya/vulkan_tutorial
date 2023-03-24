@@ -35,7 +35,7 @@ class ahdDevice {
 
   // Not copyable or movable
   ahdDevice(const ahdDevice &) = delete;
-  void operator=(const ahdDevice &) = delete;
+  ahdDevice operator=(const ahdDevice &) = delete;
   ahdDevice(ahdDevice &&) = delete;
   ahdDevice &operator=(ahdDevice &&) = delete;
 

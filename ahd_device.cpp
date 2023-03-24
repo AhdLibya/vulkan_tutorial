@@ -70,9 +70,9 @@ ahdDevice::~ahdDevice() {
 
 void ahdDevice::createInstance() {
   if (enableValidationLayers && !checkValidationLayerSupport()) {
-    throw std::runtime_error("validation layers requested, but not available!");
+    throw std::runtime_error("validation layers requested, but not available! debug markhere");
   }
-
+  std::cout << "create Instance Stage1" << '\n';
   VkApplicationInfo appInfo = {};
   appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   appInfo.pApplicationName = "LittleVulkanEngine App";
@@ -84,11 +84,11 @@ void ahdDevice::createInstance() {
   VkInstanceCreateInfo createInfo = {};
   createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   createInfo.pApplicationInfo = &appInfo;
-
+  std::cout << "create Instance Stage1" << '\n';
   auto extensions = getRequiredExtensions();
   createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
   createInfo.ppEnabledExtensionNames = extensions.data();
-
+  std::cout << "create Instance Stage2" << '\n';
   VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
   if (enableValidationLayers) {
     createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
@@ -100,12 +100,13 @@ void ahdDevice::createInstance() {
     createInfo.enabledLayerCount = 0;
     createInfo.pNext = nullptr;
   }
-
+  std::cout << "create Instance Stage3" << '\n';
   if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
     throw std::runtime_error("failed to create instance!");
   }
 
   hasGflwRequiredInstanceExtensions();
+  std::cout << "create Instance Stage4" << '\n';
 }
 
 void ahdDevice::pickPhysicalDevice() {
