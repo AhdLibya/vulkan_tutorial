@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Headers;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Headers;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Headers;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -145,7 +145,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Headers;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glfw-3.3.8.bin.WIN64\include;C:\Users\game arena\OneDrive\Documents\Visual Studio 2022\Libraries\glm;D:\VulkanSDK\1.3.231.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -159,21 +159,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ahd_pipline.cpp" />
-    <ClCompile Include="first_app.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ahd_device.cpp" />
-    <ClCompile Include="ahd_swap_chain.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="window.cpp" />
+    <ClCompile Include="src\ahd_pipline.cpp" />
+    <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\first_app.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ahd_device.cpp" />
+    <ClCompile Include="src\ahd_swap_chain.cpp" />
+    <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\sub_render_system.cpp" />
+    <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ahd_pipline.h" />
-    <ClInclude Include="first_app.h" />
-    <ClInclude Include="ahd_device.hpp" />
-    <ClInclude Include="ahd_swap_chain.hpp" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="window.h" />
+    <ClInclude Include="Headers\ahd_pipline.h" />
+    <ClInclude Include="Headers\camera.h" />
+    <ClInclude Include="Headers\defines.h" />
+    <ClInclude Include="Headers\first_app.h" />
+    <ClInclude Include="Headers\ahd_device.hpp" />
+    <ClInclude Include="Headers\ahd_swap_chain.hpp" />
+    <ClInclude Include="Headers\GameObject.h" />
+    <ClInclude Include="Headers\Model.h" />
+    <ClInclude Include="Headers\renderer.h" />
+    <ClInclude Include="Headers\resource.h" />
+    <ClInclude Include="Headers\sub_render_system.h" />
+    <ClInclude Include="Headers\window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="compile.bat" />

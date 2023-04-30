@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace ahd {
+namespace AHD {
 
 	struct PiplineConfigInfo { 
 		PiplineConfigInfo(const PiplineConfigInfo&) = delete;

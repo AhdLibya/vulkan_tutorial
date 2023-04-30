@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-namespace ahd {
+namespace AHD {
 
 class AhdSwapChain {
  public:
@@ -37,6 +37,11 @@ class AhdSwapChain {
   }
   VkFormat findDepthFormat();
 
+  bool compareSwapFormats(const AhdSwapChain& swapChain) const {
+      return swapChain.swapChainDepthFormat == swapChainDepthFormat &&
+          swapChain.swapChainImageFormat == swapChainImageFormat;
+  }
+
   VkResult acquireNextImage(uint32_t *imageIndex);
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
@@ -57,6 +62,7 @@ class AhdSwapChain {
   VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
 
   VkFormat swapChainImageFormat;
+  VkFormat swapChainDepthFormat;
   VkExtent2D swapChainExtent;
 
   std::vector<VkFramebuffer> swapChainFramebuffers;
@@ -82,4 +88,4 @@ class AhdSwapChain {
   size_t currentFrame = 0;
 };
 
-}  // namespace ahd
+}  // namespace AHD

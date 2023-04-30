@@ -2,11 +2,10 @@
 
 
 #define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
+#include "GLFW/glfw3.h"
 #include <string>
 
-namespace ahd {
+namespace AHD {
 
 	class ahdwindow {
 
@@ -19,12 +18,24 @@ namespace ahd {
 
 			bool ShoudClose() { return glfwWindowShouldClose(window); };
 
+			void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface_);
+
+			VkExtent2D getExten() { return { static_cast<uint32_t>(width) , static_cast<uint32_t>(hight) }; };
+
+			bool wasWindowResized() { return frameBufferReszie; };
+
+			void resetWindowResize() { frameBufferReszie = false; };
+
 		private :
+
+			static void frameBufferResizeWindowCallBack(GLFWwindow* window, int width ,int height);
 
 			void initWindow();
 
-			const int width;
-			const int hight;
+			int width;
+			int hight;
+
+			bool frameBufferReszie = false;
 
 			std::string windowName;
 

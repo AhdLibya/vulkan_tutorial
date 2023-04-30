@@ -18,45 +18,75 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window.cpp">
+    <ClCompile Include="src\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="first_app.cpp">
+    <ClCompile Include="src\first_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ahd_pipline.cpp">
+    <ClCompile Include="src\ahd_pipline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ahd_device.cpp">
+    <ClCompile Include="src\ahd_device.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ahd_swap_chain.cpp">
+    <ClCompile Include="src\ahd_swap_chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sub_render_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="window.h">
+    <ClInclude Include="Headers\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="first_app.h">
+    <ClInclude Include="Headers\first_app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ahd_pipline.h">
+    <ClInclude Include="Headers\ahd_pipline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ahd_device.hpp">
+    <ClInclude Include="Headers\ahd_device.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ahd_swap_chain.hpp">
+    <ClInclude Include="Headers\ahd_swap_chain.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
+    <ClInclude Include="Headers\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\sub_render_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

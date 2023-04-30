@@ -7,7 +7,7 @@
 
 int main() {
 
-	ahd::first_app app{};
+	AHD::first_app app{};
 
 	try {
 		app.run();

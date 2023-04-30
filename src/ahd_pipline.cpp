@@ -7,26 +7,29 @@
 #include <cassert>
 
 
-namespace ahd {
+namespace AHD {
 
-	AhdPipline::AhdPipline(ahdDevice& device, const std::string& vertexfile, const std::string& fragmentfile, const PiplineConfigInfo& configInfo) : AhdDevice{device} {
+	AhdPipline::AhdPipline(ahdDevice& device, const std::string& vertexfile, const std::string& fragmentfile, const PiplineConfigInfo& configInfo) : AhdDevice{device} 
+	{
 		createGraphicsPipline(vertexfile , fragmentfile , configInfo);
 	}
 
-	AhdPipline :: ~AhdPipline() {
+	AhdPipline :: ~AhdPipline() 
+	{
 		vkDestroyShaderModule(AhdDevice.device(), vertShaderModule, nullptr);
 		vkDestroyShaderModule(AhdDevice.device(), fragShaderModule, nullptr);
 		vkDestroyPipeline(AhdDevice.device(), GraphicsPipline, nullptr);
 	}
 
-	std::vector<char> AhdPipline::readfile(const std::string& filepath) {
+	std::vector<char> AhdPipline::readfile(const std::string& filepath) 
+	{
 
 		std::ifstream file(filepath, std::ios::ate | std::ios::binary);
-		std::string ERROMESSAGE = "[ERROR]: Failed To Open File!\n [FILE]: ";
+		std::string ERROR_MESSAGE = "[ERROR]: Failed To Open File!\n [FILE]: ";
 
 		if (!file.is_open())
 		{
-			throw std::runtime_error(ERROMESSAGE.append(filepath));
+			throw std::runtime_error(ERROR_MESSAGE.append(filepath));
 		}
 
 		size_t fileSize = (size_t)file.tellg();
@@ -39,7 +42,8 @@ namespace ahd {
 		return buffer;
 	}
 
-	void AhdPipline::createGraphicsPipline(const std::string& vertexfile, const std::string& fragmentfile, const PiplineConfigInfo& configInfo) {
+	void AhdPipline::createGraphicsPipline(const std::string& vertexfile, const std::string& fragmentfile, const PiplineConfigInfo& configInfo) 
+	{
 		assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot Create Gp-pipline ::  Pipline layout Not Found in ConfigInfo ");
 		assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot Create Gp-pipline ::  renderpass Not Found in ConfigInfo ");
 		std::cout << "Creating GP Pipline" << '\n';
@@ -78,15 +82,6 @@ namespace ahd {
 		vertexInputInfo.vertexBindingDescriptionCount   = static_cast<uint32_t>(bindingDescriotions.size());
 		vertexInputInfo.pVertexAttributeDescriptions    = attributeDescriptions.data();
 		vertexInputInfo.pVertexBindingDescriptions      = bindingDescriotions.data();
-		/*
-		VkPipelineViewportStateCreateInfo viewportInfo{};
-		viewportInfo.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-		viewportInfo.viewportCount = 1;
-		viewportInfo.pViewports    = &configInfo.viewport;
-		viewportInfo.scissorCount  = 1;
-		viewportInfo.pScissors     = &configInfo.scissor;
-		*/
-		
 		
 
 		// Pipline Info Setup :)
@@ -118,7 +113,8 @@ namespace ahd {
 
 	}
 
-	void AhdPipline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
+	void AhdPipline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) 
+	{
 		std::cout << "Creating Shader Module stage 1" << '\n';
 		VkShaderModuleCreateInfo createShaderModuleInfo{};
 		createShaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -132,11 +128,13 @@ namespace ahd {
 		std::cout << "Creating Shader Module stage 2" << '\n';
 	}
 
-	void AhdPipline:: bind(VkCommandBuffer commandbuffer) {
+	void AhdPipline:: bind(VkCommandBuffer commandbuffer) 
+	{
 		vkCmdBindPipeline(commandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, GraphicsPipline);
 	}
 
-	void AhdPipline::defaultPiplineConfigInfo(PiplineConfigInfo& configInfo) {
+	void AhdPipline::defaultPiplineConfigInfo(PiplineConfigInfo& configInfo) 
+	{
 
 		std::cout << "creating PiplineConfig Info struct" << '\n';
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -177,19 +175,19 @@ namespace ahd {
 		configInfo.colorBlendAttachment.colorWriteMask =
 			VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
 			VK_COLOR_COMPONENT_A_BIT;
-		configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
+		configInfo.colorBlendAttachment.blendEnable         = VK_FALSE;
 		configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;   // Optional
 		configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;  // Optional
-		configInfo.colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;              // Optional
+		configInfo.colorBlendAttachment.colorBlendOp        = VK_BLEND_OP_ADD;              // Optional
 		configInfo.colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;   // Optional
 		configInfo.colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;  // Optional
-		configInfo.colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;              // Optional
+		configInfo.colorBlendAttachment.alphaBlendOp        = VK_BLEND_OP_ADD;              // Optional
 		std::cout << "Compile stage 7" << '\n';
-		configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-		configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
-		configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY;  // Optional
-		configInfo.colorBlendInfo.attachmentCount = 1;
-		configInfo.colorBlendInfo.pAttachments = &configInfo.colorBlendAttachment;
+		configInfo.colorBlendInfo.sType             = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+		configInfo.colorBlendInfo.logicOpEnable     = VK_FALSE;
+		configInfo.colorBlendInfo.logicOp           = VK_LOGIC_OP_COPY;  // Optional
+		configInfo.colorBlendInfo.attachmentCount   = 1;
+		configInfo.colorBlendInfo.pAttachments      = &configInfo.colorBlendAttachment;
 		configInfo.colorBlendInfo.blendConstants[0] = 0.0f;  // Optional
 		configInfo.colorBlendInfo.blendConstants[1] = 0.0f;  // Optional
 		configInfo.colorBlendInfo.blendConstants[2] = 0.0f;  // Optional
